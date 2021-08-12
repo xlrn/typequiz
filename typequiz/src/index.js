@@ -7,9 +7,10 @@ function SomeButton () {
   const [type, setType] = useState("");
   const [error, setError] = useState(null);
   const [isLoaded, setIsLoaded] = useState(false);
-
-  useEffect(() => {
-    fetch("https://pokeapi.co/api/v2/type/5/")
+  
+  function fetchData() {
+    let randomType = Math.floor(Math.random() * 18) + 1;
+    fetch(`https://pokeapi.co/api/v2/type/${randomType}/`)
       .then(res => res.json())
       .then(
         (result) => {
@@ -19,7 +20,11 @@ function SomeButton () {
         (error) => {
           setIsLoaded(true);
           setError(error);
-        }) 
+      })
+  }
+
+  useEffect(() => {
+     fetchData();
   }, [])
 
   if (error) {
@@ -30,7 +35,7 @@ function SomeButton () {
   return (
     <div>
       <h1>{type}</h1>
-      <button onClick={() => setType("water")}>Click here to change type</button>
+      <button onClick={fetchData}>Click here to change type</button>
     </div>
   )}
 }
