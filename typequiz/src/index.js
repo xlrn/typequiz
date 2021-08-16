@@ -3,10 +3,12 @@ import ReactDOM from 'react-dom';
 import './index.css';
 
 
+
 function SomeButton () {
   const [type, setType] = useState("");
   const [error, setError] = useState(null);
   const [isLoaded, setIsLoaded] = useState(false);
+  const [weakness, setWeakness] = useState([]);
   
   function fetchData() {
     let randomType = Math.floor(Math.random() * 18) + 1;
@@ -15,7 +17,13 @@ function SomeButton () {
       .then(
         (result) => {
           setIsLoaded(true);
-          setType(result.name)
+          setType(result.name);
+          let weaknesses = result.damage_relations.double_damage_from;
+          let weaknessState = [];
+          for(const type in weaknesses) {
+            weaknessState.push(weaknesses[type].name);
+          }
+          setWeakness(weaknessState);
         },
         (error) => {
           setIsLoaded(true);
@@ -27,6 +35,9 @@ function SomeButton () {
      fetchData();
   }, [])
 
+  const weaklist = weakness.map((weak) => 
+    <h2 key={weak}>{weak}</h2>);
+
   if (error) {
     return <div>Error: {error.message}</div>
   } else if (!isLoaded) {
@@ -35,6 +46,9 @@ function SomeButton () {
   return (
     <div>
       <h1>{type}</h1>
+      <div>
+        {weaklist}
+      </div>
       <button onClick={fetchData}>Click here to change type</button>
     </div>
   )}
