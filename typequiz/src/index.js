@@ -2,6 +2,13 @@ import React, { useEffect, useState } from 'react';
 import ReactDOM from 'react-dom';
 import './index.css';
 
+function scoreKeeper(props) {
+  return (
+    <div>
+      <h1>{props.score}</h1>
+    </div>
+  )
+}
 
 
 function SomeButton () {
@@ -54,13 +61,14 @@ function SomeButton () {
   )}
 }
 
-function App() {
+function Quiz() {
+  // lift state from somebutton into quiz
   return SomeButton();
 }
 
 ReactDOM.render(
   <React.StrictMode>
-    <App />
+    <Quiz />
   </React.StrictMode>,
   document.getElementById('root')
 );
