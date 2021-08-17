@@ -64,11 +64,17 @@ function SomeButton () {
 function Quiz() {
   // lift state from somebutton into quiz
   const [score, setScore] = useState(0);
+  
+  function handleClick() {
+    let newScore = score + 1;
+    setScore(newScore);
+  }
 
   return (
     <div>
       <ScoreKeeper score={score}/>
       <SomeButton/>
+      <button onClick={handleClick}>AAAA</button>
     </div>
   )
 }
