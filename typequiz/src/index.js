@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import ReactDOM from 'react-dom';
 import './index.css';
 
-function scoreKeeper(props) {
+function ScoreKeeper(props) {
   return (
     <div>
       <h1>{props.score}</h1>
@@ -63,7 +63,14 @@ function SomeButton () {
 
 function Quiz() {
   // lift state from somebutton into quiz
-  return SomeButton();
+  const [score, setScore] = useState(0);
+
+  return (
+    <div>
+      <ScoreKeeper score={score}/>
+      <SomeButton/>
+    </div>
+  )
 }
 
 ReactDOM.render(
