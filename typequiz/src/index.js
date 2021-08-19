@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import ReactDOM from 'react-dom';
+import ReactDOM, { render } from 'react-dom';
 import './index.css';
 
 function ScoreKeeper(props) {
@@ -10,6 +10,13 @@ function ScoreKeeper(props) {
   )
 }
 
+function TypeButton(props) {
+  return (
+    <div>
+      <button value={props.type}>{props.type}</button>
+    </div>
+  )
+}
 
 function SomeButton (props) {
   return (
@@ -48,15 +55,21 @@ function Quiz() {
           setError(error);
       })
   }
-
+  
+  // figure out some way to call fetchData on load
   useEffect(() => {
     fetchData();
-  }, [])
+  }, []);
 
+  function renderTypeButton(type) {
+    return (
+      <TypeButton type={type}>{type}</TypeButton>
+    )
+  }
   const weaklist = weakness.map((weak) => 
   <h2 key={weak}>{weak}</h2>);
 
-  function handleClick() {
+  function updateScore() {
     let newScore = score + 1;
     setScore(newScore);
   }
@@ -71,8 +84,8 @@ function Quiz() {
       <h1>{type}</h1>
       <div>{weaklist}</div>
       <ScoreKeeper score={score}/>
+      {renderTypeButton(type)}
       <SomeButton handleClick={fetchData}/>
-      <button onClick={handleClick}>AAAA</button>
     </div>
   )}
 }
