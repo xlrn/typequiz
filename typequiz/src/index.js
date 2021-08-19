@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
-import ReactDOM, { render } from 'react-dom';
+import ReactDOM from 'react-dom';
 import './index.css';
+import typeList from './types';
 
 function ScoreKeeper(props) {
   return (
@@ -18,11 +19,9 @@ function TypeButton(props) {
   )
 }
 
-function SomeButton (props) {
+function CompleteMessage() {
   return (
-    <div>
-      <button onClick={props.handleClick}>Click here to change type</button>
-    </div>
+    <div>You've completed the quiz!</div>
   )
 }
 
@@ -33,6 +32,7 @@ function Quiz() {
   const [error, setError] = useState(null);
   const [isLoaded, setIsLoaded] = useState(true);
   const [weakness, setWeakness] = useState([]);
+  const [quizButtons, setQuizButtons] = useState([]);
   
   function fetchData() {
     let randomType = Math.floor(Math.random() * 18) + 1;
@@ -48,6 +48,8 @@ function Quiz() {
             weaknessState.push(weaknesses[type].name);
           }
           setWeakness(weaknessState);
+          let rando = Math.floor(Math.random() * weaknessState.length);
+          gatherTypes(weaknessState[rando]);
         },
         (error) => {
           setIsLoaded(true);
@@ -66,11 +68,35 @@ function Quiz() {
     )
   }
 
+  function gatherTypes(weakness) {
+    let types = [];
+    let count = 0;
+    while (count < 3) {
+      let rando = Math.floor(Math.random() * 17) + 1;
+      let getType = Object.values(typeList)[rando];
+      if (getType !== weakness && !types.includes(getType)) {
+        types.push(getType);
+        count++;
+      }
+    }
+    types.push(weakness);
+    shuffleArray(types);
+    setQuizButtons(types);
+  }
+
+  function shuffleArray(a) {
+    for (let i = a.length - 1; i > 0; i--) {
+      const j = Math.floor(Math.random() * (i + 1));
+      [a[i], a[j]] = [a[j], a[i]];
+    }
+    return a;
+  }
+
   function handleQuizLogic(e) {
-    console.log(weakness);
-    console.log(e.target.value);
     if (weakness.includes(e.target.value)) {
       updateScore();
+      fetchData();
+    } else {
       fetchData();
     }
   }
@@ -89,8 +115,10 @@ function Quiz() {
     <div>
       <h1>{type}</h1>
       <ScoreKeeper score={score}/>
-      {renderTypeButton(weakness[0])}
-      <SomeButton handleClick={fetchData}/>
+      {renderTypeButton(quizButtons[0])}
+      {renderTypeButton(quizButtons[1])}
+      {renderTypeButton(quizButtons[2])}
+      {renderTypeButton(quizButtons[3])}
     </div>
   )}
 }
