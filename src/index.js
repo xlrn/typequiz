@@ -110,8 +110,9 @@ function Quiz() {
   return (
     <div className="container">
       <div>{status}</div>
-      <h1>{type}</h1>
+      <h1>Your target type: {type}</h1>
       <ScoreKeeper score={score}/>
+      <div>Select the type your target is weak to!</div>
       <div className="buttons">
         {renderTypeButton(quizButtons[0])}
         {renderTypeButton(quizButtons[1])}
