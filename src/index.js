@@ -22,7 +22,7 @@ function Quiz() {
   const [score, setScore] = useState(0);
   const [type, setType] = useState("");
   const [error, setError] = useState(null);
-  const [isLoaded, setIsLoaded] = useState(true);
+  const [isLoaded, setIsLoaded] = useState(false);
   const [weakness, setWeakness] = useState([]);
   const [quizButtons, setQuizButtons] = useState([]);
   const [status, setStatus] = useState("");
