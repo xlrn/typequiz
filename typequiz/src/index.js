@@ -12,28 +12,11 @@ function ScoreKeeper(props) {
 
 
 function SomeButton (props) {
-
-  useEffect(() => {
-    props.fetchData();
-  }, [])
-
-  const weaklist = props.weakness.map((weak) => 
-    <h2 key={weak}>{weak}</h2>);
-
-  if (props.error) {
-    return <div>Error: {props.error.message}</div>
-  } else if (!props.isLoaded) {
-    return <div>Loading...</div>
-  } else {
   return (
     <div>
-      <h1>{props.type}</h1>
-      <div>
-        {weaklist}
-      </div>
-      <button>Click here to change type</button>
+      <button onClick={props.handleClick}>Click here to change type</button>
     </div>
-  )}
+  )
 }
 
 function Quiz() {
@@ -41,7 +24,7 @@ function Quiz() {
   const [score, setScore] = useState(0);
   const [type, setType] = useState("");
   const [error, setError] = useState(null);
-  const [isLoaded, setIsLoaded] = useState(false);
+  const [isLoaded, setIsLoaded] = useState(true);
   const [weakness, setWeakness] = useState([]);
   
   function fetchData() {
@@ -58,6 +41,7 @@ function Quiz() {
             weaknessState.push(weaknesses[type].name);
           }
           setWeakness(weaknessState);
+          console.log(weakness);
         },
         (error) => {
           setIsLoaded(true);
@@ -65,18 +49,32 @@ function Quiz() {
       })
   }
 
+  useEffect(() => {
+    fetchData();
+  }, [])
+
+  const weaklist = weakness.map((weak) => 
+  <h2 key={weak}>{weak}</h2>);
+
   function handleClick() {
     let newScore = score + 1;
     setScore(newScore);
   }
 
+  if (error) {
+    return <div>Error: {error.message}</div>
+  } else if (!isLoaded) {
+    return <div>Loading...</div>
+  } else {
   return (
     <div>
+      <h1>{type}</h1>
+      <div>{weaklist}</div>
       <ScoreKeeper score={score}/>
-      <SomeButton type={type} error={error} isLoaded={isLoaded} weakness={weakness}/>
+      <SomeButton handleClick={fetchData}/>
       <button onClick={handleClick}>AAAA</button>
     </div>
-  )
+  )}
 }
 
 ReactDOM.render(
@@ -85,4 +83,3 @@ ReactDOM.render(
   </React.StrictMode>,
   document.getElementById('root')
 );
-
