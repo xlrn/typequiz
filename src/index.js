@@ -6,16 +6,14 @@ import typeList from './types';
 function ScoreKeeper(props) {
   return (
     <div>
-      <h1>{props.score}</h1>
+      <h1>Correct Answers: {props.score}</h1>
     </div>
   )
 }
 
 function TypeButton(props) {
   return (
-    <div>
-      <button value={props.type} onClick={props.onClick}>{props.type}</button>
-    </div>
+      <button className="typeButton" value={props.type} onClick={props.onClick}>{props.type}</button>
   )
 }
 
@@ -110,14 +108,16 @@ function Quiz() {
     return <div>Loading...</div>
   } else {
   return (
-    <div>
+    <div className="container">
       <div>{status}</div>
       <h1>{type}</h1>
       <ScoreKeeper score={score}/>
-      {renderTypeButton(quizButtons[0])}
-      {renderTypeButton(quizButtons[1])}
-      {renderTypeButton(quizButtons[2])}
-      {renderTypeButton(quizButtons[3])}
+      <div className="buttons">
+        {renderTypeButton(quizButtons[0])}
+        {renderTypeButton(quizButtons[1])}
+        {renderTypeButton(quizButtons[2])}
+        {renderTypeButton(quizButtons[3])}
+      </div>
     </div>
   )}
 }
