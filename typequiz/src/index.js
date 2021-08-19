@@ -13,7 +13,7 @@ function ScoreKeeper(props) {
 function TypeButton(props) {
   return (
     <div>
-      <button value={props.type}>{props.type}</button>
+      <button value={props.type} onClick={props.onClick}>{props.type}</button>
     </div>
   )
 }
@@ -48,7 +48,6 @@ function Quiz() {
             weaknessState.push(weaknesses[type].name);
           }
           setWeakness(weaknessState);
-          console.log(weakness);
         },
         (error) => {
           setIsLoaded(true);
@@ -63,11 +62,18 @@ function Quiz() {
 
   function renderTypeButton(type) {
     return (
-      <TypeButton type={type}>{type}</TypeButton>
+      <TypeButton type={type} onClick={handleQuizLogic}>{type}</TypeButton>
     )
   }
-  const weaklist = weakness.map((weak) => 
-  <h2 key={weak}>{weak}</h2>);
+
+  function handleQuizLogic(e) {
+    console.log(weakness);
+    console.log(e.target.value);
+    if (weakness.includes(e.target.value)) {
+      updateScore();
+      fetchData();
+    }
+  }
 
   function updateScore() {
     let newScore = score + 1;
@@ -82,9 +88,8 @@ function Quiz() {
   return (
     <div>
       <h1>{type}</h1>
-      <div>{weaklist}</div>
       <ScoreKeeper score={score}/>
-      {renderTypeButton(type)}
+      {renderTypeButton(weakness[0])}
       <SomeButton handleClick={fetchData}/>
     </div>
   )}
