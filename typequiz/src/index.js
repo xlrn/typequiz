@@ -19,12 +19,6 @@ function TypeButton(props) {
   )
 }
 
-function CompleteMessage() {
-  return (
-    <div>You've completed the quiz!</div>
-  )
-}
-
 function Quiz() {
   // lift state from somebutton into quiz
   const [score, setScore] = useState(0);
@@ -33,6 +27,7 @@ function Quiz() {
   const [isLoaded, setIsLoaded] = useState(true);
   const [weakness, setWeakness] = useState([]);
   const [quizButtons, setQuizButtons] = useState([]);
+  const [status, setStatus] = useState("");
   
   function fetchData() {
     let randomType = Math.floor(Math.random() * 18) + 1;
@@ -104,6 +99,9 @@ function Quiz() {
   function updateScore() {
     let newScore = score + 1;
     setScore(newScore);
+    if (newScore >= 10) {
+      setStatus("You have completed the quiz!");
+    }
   }
 
   if (error) {
@@ -113,6 +111,7 @@ function Quiz() {
   } else {
   return (
     <div>
+      <div>{status}</div>
       <h1>{type}</h1>
       <ScoreKeeper score={score}/>
       {renderTypeButton(quizButtons[0])}
