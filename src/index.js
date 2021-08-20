@@ -19,81 +19,49 @@ function TypeButton(props) {
 
 function Quiz() {
   const [score, setScore] = useState(0);
-  const [type, setType] = useState("");
   const [types, setTypes] = useState([]);
   const [error, setError] = useState(null);
   const [isLoaded, setIsLoaded] = useState(false);
   const [weakness, setWeakness] = useState([]);
   const [quizButtons, setQuizButtons] = useState([]);
   const [status, setStatus] = useState("");
-  
-  // function fetchData() {
-  //   let randomType = generateRandom(18) + 1;
-  //   fetch(`https://pokeapi.co/api/v2/type/${randomType}/`)
-  //     .then(res => res.json())
-  //     .then(
-  //       (result) => {
-  //         setIsLoaded(true);
-  //         setType(result.name);
-  //         let weaknesses = result.damage_relations.double_damage_from;
-  //         let weaknessState = [];
-  //         for(const type in weaknesses) {
-  //           weaknessState.push(weaknesses[type].name);
-  //         }
-  //         setWeakness(weaknessState);
-  //         let rando = generateRandom(weaknessState.length);
-  //         gatherTypes(weaknessState[rando]);
-  //       },
-  //       (error) => {
-  //         setIsLoaded(true);
-  //         setError(error);
-  //     })
-  // }
 
-  function fetchData() {
+  function bigFetch() {
     let newTypes = [];
     let weaknesses = [];
     let resistances = [];
     let random1 = generateRandom(18) + 1;
+    let random2 = generateRandom(18) + 1;
     fetch(`https://pokeapi.co/api/v2/type/${random1}/`)
-      .then(res => res.json())
-      .then(
-        (result) => {
-          newTypes.push(result.name);
-          addToWeaknesses(result.damage_relations.double_damage_from, weaknesses);
-          addToResistances(result.damage_relations.half_damage_from, resistances);
-        }
-      )
-      // .then(() => {
-      //   let random2 = random1;
-      //   while (random2 === random1) {
-      //     random2 = generateRandom(18) + 1;
-      //   }
-      //   return random2
-      // })
-      // .then( random2 =>
-      //   fetch(`https://pokeapi.co/api/v2/type/${random2}/`)
-      // )
-      // .then(
-      //   (result2) => {
-      //     newTypes.push(result2.name);
-      //     console.log(result2.name);
-      //     addToWeaknesses(result2.damage_relations.double_damage_from, weaknesses);
-      //     addToResistances(result2.damage_relations.half_damage_from, resistances);
-      //   }
-    //  )
-      .then(() => {
-        removeResistances(resistances, weaknesses);
-        setWeakness(weaknesses);
-        setTypes(newTypes);
-        let rando = generateRandom(weaknesses.length);
-        gatherTypes(weaknesses[rando]);
-        setIsLoaded(true);
+    .then(res => res.json())
+    .then(result => doData(result, newTypes, weaknesses, resistances))
+    // .then(() => {
+    //   if (random2 !== random1) {
+    //     fetch(`https://pokeapi.co/api/v2/type/${random2}/`)
+    //     .then(res2 => res2.json())
+    //     .then(result2 => doData(result2, newTypes, weaknesses, resistances))
+    //   } else return;
+    // })
+    .then(() => {
+      removeResistances(resistances, weaknesses);
+      setWeakness(weaknesses);
+      setTypes(newTypes);
+      let rando = generateRandom(weaknesses.length);
+      gatherTypes(weaknesses[rando]);
+      setIsLoaded(true);
+    }, (error) => {
+      setIsLoaded(true);
+      setError(error);
+    })
+  }
 
-      }, (error) => {
-        setIsLoaded(true);
-        setError(error);
-      })
+  // add a conditional promise chaining function
+  // also add a function that will do all state setting
+
+  function doData(res, typesArr, weakArr, resArr) {
+          typesArr.push(res.name);
+          addToWeaknesses(res.damage_relations.double_damage_from, weakArr);
+          addToResistances(res.damage_relations.half_damage_from, resArr);
   }
 
   function addToWeaknesses(res, weaknessArr) {
@@ -122,7 +90,7 @@ function Quiz() {
 
   // figure out some way to call fetchData on load
   useEffect(() => {
-    fetchData();
+    bigFetch();
   }, []);
 
   function renderTypeButton(type) {
@@ -157,10 +125,10 @@ function Quiz() {
 
   function handleQuizLogic(e) {
     if (weakness.includes(e.target.value)) {
-      fetchData();
+      bigFetch();
       updateScore();
     } else {
-      fetchData();
+      bigFetch();
     }
   }
 
@@ -180,7 +148,7 @@ function Quiz() {
   return (
     <div className="container">
       <div>{status}</div>
-      <h1>Your target type: {types[0]}</h1>
+      <h1>Your target type: {types[0]} / {types[1]}</h1>
       <ScoreKeeper score={score}/>
       <div>Select the type your target is weak to!</div>
       <div className="buttons">
