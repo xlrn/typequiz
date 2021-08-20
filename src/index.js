@@ -18,38 +18,108 @@ function TypeButton(props) {
 }
 
 function Quiz() {
-  // lift state from somebutton into quiz
   const [score, setScore] = useState(0);
   const [type, setType] = useState("");
+  const [types, setTypes] = useState([]);
   const [error, setError] = useState(null);
   const [isLoaded, setIsLoaded] = useState(false);
   const [weakness, setWeakness] = useState([]);
   const [quizButtons, setQuizButtons] = useState([]);
   const [status, setStatus] = useState("");
   
+  // function fetchData() {
+  //   let randomType = generateRandom(18) + 1;
+  //   fetch(`https://pokeapi.co/api/v2/type/${randomType}/`)
+  //     .then(res => res.json())
+  //     .then(
+  //       (result) => {
+  //         setIsLoaded(true);
+  //         setType(result.name);
+  //         let weaknesses = result.damage_relations.double_damage_from;
+  //         let weaknessState = [];
+  //         for(const type in weaknesses) {
+  //           weaknessState.push(weaknesses[type].name);
+  //         }
+  //         setWeakness(weaknessState);
+  //         let rando = generateRandom(weaknessState.length);
+  //         gatherTypes(weaknessState[rando]);
+  //       },
+  //       (error) => {
+  //         setIsLoaded(true);
+  //         setError(error);
+  //     })
+  // }
+
   function fetchData() {
-    let randomType = Math.floor(Math.random() * 18) + 1;
-    fetch(`https://pokeapi.co/api/v2/type/${randomType}/`)
+    let newTypes = [];
+    let weaknesses = [];
+    let resistances = [];
+    let random1 = generateRandom(18) + 1;
+    fetch(`https://pokeapi.co/api/v2/type/${random1}/`)
       .then(res => res.json())
       .then(
         (result) => {
-          setIsLoaded(true);
-          setType(result.name);
-          let weaknesses = result.damage_relations.double_damage_from;
-          let weaknessState = [];
-          for(const type in weaknesses) {
-            weaknessState.push(weaknesses[type].name);
-          }
-          setWeakness(weaknessState);
-          let rando = Math.floor(Math.random() * weaknessState.length);
-          gatherTypes(weaknessState[rando]);
-        },
-        (error) => {
-          setIsLoaded(true);
-          setError(error);
+          newTypes.push(result.name);
+          addToWeaknesses(result.damage_relations.double_damage_from, weaknesses);
+          addToResistances(result.damage_relations.half_damage_from, resistances);
+        }
+      )
+      // .then(() => {
+      //   let random2 = random1;
+      //   while (random2 === random1) {
+      //     random2 = generateRandom(18) + 1;
+      //   }
+      //   return random2
+      // })
+      // .then( random2 =>
+      //   fetch(`https://pokeapi.co/api/v2/type/${random2}/`)
+      // )
+      // .then(
+      //   (result2) => {
+      //     newTypes.push(result2.name);
+      //     console.log(result2.name);
+      //     addToWeaknesses(result2.damage_relations.double_damage_from, weaknesses);
+      //     addToResistances(result2.damage_relations.half_damage_from, resistances);
+      //   }
+    //  )
+      .then(() => {
+        removeResistances(resistances, weaknesses);
+        setWeakness(weaknesses);
+        setTypes(newTypes);
+        let rando = generateRandom(weaknesses.length);
+        gatherTypes(weaknesses[rando]);
+        setIsLoaded(true);
+
+      }, (error) => {
+        setIsLoaded(true);
+        setError(error);
       })
   }
-  
+
+  function addToWeaknesses(res, weaknessArr) {
+    for(const type in res) {
+      if (!weaknessArr.includes(type)) {
+        weaknessArr.push(res[type].name);
+      }
+    }
+  }
+
+  function addToResistances(res, resistArr) {
+    for(const type in res) {
+      if (!resistArr.includes(type)) {
+        resistArr.push(res[type].name)
+      }
+    }
+  }
+
+  function removeResistances(resists, weaknessArr) {
+    for(const type in resists) {
+      if (weaknessArr.includes(type)) {
+        weaknessArr.Splice(weaknessArr.indexOf(type), 1);
+      }
+    }
+  }
+
   // figure out some way to call fetchData on load
   useEffect(() => {
     fetchData();
@@ -65,7 +135,7 @@ function Quiz() {
     let types = [];
     let count = 0;
     while (count < 3) {
-      let rando = Math.floor(Math.random() * 17) + 1;
+      let rando = generateRandom(17) + 1;
       let getType = Object.values(typeList)[rando];
       if (getType !== weakness && !types.includes(getType)) {
         types.push(getType);
@@ -79,7 +149,7 @@ function Quiz() {
 
   function shuffleArray(a) {
     for (let i = a.length - 1; i > 0; i--) {
-      const j = Math.floor(Math.random() * (i + 1));
+      const j = generateRandom(i+1);
       [a[i], a[j]] = [a[j], a[i]];
     }
     return a;
@@ -87,8 +157,8 @@ function Quiz() {
 
   function handleQuizLogic(e) {
     if (weakness.includes(e.target.value)) {
-      updateScore();
       fetchData();
+      updateScore();
     } else {
       fetchData();
     }
@@ -110,7 +180,7 @@ function Quiz() {
   return (
     <div className="container">
       <div>{status}</div>
-      <h1>Your target type: {type}</h1>
+      <h1>Your target type: {types[0]}</h1>
       <ScoreKeeper score={score}/>
       <div>Select the type your target is weak to!</div>
       <div className="buttons">
@@ -129,3 +199,7 @@ ReactDOM.render(
   </React.StrictMode>,
   document.getElementById('root')
 );
+
+function generateRandom(num) {
+  return Math.floor(Math.random() * num);
+}
