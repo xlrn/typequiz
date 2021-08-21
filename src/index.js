@@ -26,33 +26,41 @@ function Quiz() {
   const [quizButtons, setQuizButtons] = useState([]);
   const [status, setStatus] = useState("");
 
-  function bigFetch() {
+  async function bigFetch() {
     let newTypes = [];
     let weaknesses = [];
     let resistances = [];
     let random1 = generateRandom(18) + 1;
     let random2 = generateRandom(18) + 1;
-    fetch(`https://pokeapi.co/api/v2/type/${random1}/`)
-    .then(res => res.json())
-    .then(result => doData(result, newTypes, weaknesses, resistances))
-    // .then(() => {
-    //   if (random2 !== random1) {
-    //     fetch(`https://pokeapi.co/api/v2/type/${random2}/`)
-    //     .then(res2 => res2.json())
-    //     .then(result2 => doData(result2, newTypes, weaknesses, resistances))
-    //   } else return;
-    // })
-    .then(() => {
-      removeResistances(resistances, weaknesses);
+    try {
+      const response1 = await fetch(`https://pokeapi.co/api/v2/type/${random1}/`);
+      const type1 = await response1.json();
+      doData(type1, newTypes, weaknesses, resistances);
+      if (checkRandom(random1, random2)) {
+        const response2 = await fetch(`https://pokeapi.co/api/v2/type/${random2}/`);
+        const type2 = await response2.json();
+        doData(type2, newTypes, weaknesses, resistances);
+        removeResistances(resistances, weaknesses);
+      }
       setWeakness(weaknesses);
       setTypes(newTypes);
-      let rando = generateRandom(weaknesses.length);
-      gatherTypes(weaknesses[rando]);
+      gatherTypes(weaknesses[generateRandom(weaknesses.length)]);
       setIsLoaded(true);
-    }, (error) => {
+    }
+    catch (error) {
+      handleError(error);
+    }
+  }
+
+  function handleError(error) {
+    if (error) {
       setIsLoaded(true);
       setError(error);
-    })
+    }
+  }
+
+  function checkRandom(num1, num2) {
+    return (num1 !== num2 ? true : false);
   }
 
   // add a conditional promise chaining function
@@ -81,12 +89,13 @@ function Quiz() {
   }
 
   function removeResistances(resists, weaknessArr) {
-    for(const type in resists) {
-      if (weaknessArr.includes(type)) {
-        weaknessArr.Splice(weaknessArr.indexOf(type), 1);
+    resists.forEach(resist => {
+      if (weaknessArr.includes(resist)) {
+        weaknessArr.splice(weaknessArr.indexOf(resist), 1);
       }
-    }
+    })
   }
+  
 
   // figure out some way to call fetchData on load
   useEffect(() => {
