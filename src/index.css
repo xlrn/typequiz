@@ -15,10 +15,17 @@ code {
 .container {
   margin: auto;
   width: 50%;
+  height: 100vh;
+  background-color: #b3ebf2;
+  text-align: center;
 }
 
 .buttons {
   width: 100%
+}
+
+.text {
+  margin-bottom: 10px;
 }
 
 .typeButton {

@@ -186,10 +186,11 @@ function Quiz() {
   } else {
   return (
     <div className="container">
+      <div className="text">Reach 10 points to finish the quiz.</div>
       <div>{status}</div>
       <TypeDisplay types={types}/>
       <ScoreKeeper score={score}/>
-      <div>Select the type your target is weak to!</div>
+      <div className="text">Select the type your target is weak to!</div>
       <div className="buttons">
         {renderTypeButton(quizButtons[0])}
         {renderTypeButton(quizButtons[1])}
