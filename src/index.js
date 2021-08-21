@@ -17,6 +17,20 @@ function TypeButton(props) {
   )
 }
 
+function TypeDisplay(props) {
+  if (props.types.length > 1) {
+    return (
+      <div>
+        <h1>Your target type: {props.types[0]} / {props.types[1]}</h1>
+      </div>
+    )
+  } else {
+    return (
+      <h1>Your target type: {props.types[0]}</h1>
+    )
+  }
+}
+
 function Quiz() {
   const [score, setScore] = useState(0);
   const [types, setTypes] = useState([]);
@@ -173,7 +187,7 @@ function Quiz() {
   return (
     <div className="container">
       <div>{status}</div>
-      <h1>Your target type: {types[0]} / {types[1]}</h1>
+      <TypeDisplay types={types}/>
       <ScoreKeeper score={score}/>
       <div>Select the type your target is weak to!</div>
       <div className="buttons">
