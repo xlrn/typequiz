@@ -4,6 +4,5 @@ Pokemon Type Quiz App
     - Score up to 10 to win
 
 TODO:
-    - Add dual-typing logic
     - Add displaying the pokemon image and type
     - Add penalties
