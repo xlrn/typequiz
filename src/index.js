@@ -30,17 +30,19 @@ function Quiz() {
     let newTypes = [];
     let weaknesses = [];
     let resistances = [];
+    let immunities = [];
     let random1 = generateRandom(18) + 1;
     let random2 = generateRandom(18) + 1;
     try {
       const response1 = await fetch(`https://pokeapi.co/api/v2/type/${random1}/`);
       const type1 = await response1.json();
-      doData(type1, newTypes, weaknesses, resistances);
+      doData(type1, newTypes, weaknesses, resistances, immunities);
       if (checkRandom(random1, random2)) {
         const response2 = await fetch(`https://pokeapi.co/api/v2/type/${random2}/`);
         const type2 = await response2.json();
-        doData(type2, newTypes, weaknesses, resistances);
+        doData(type2, newTypes, weaknesses, resistances, immunities);
         removeResistances(resistances, weaknesses);
+        removeImmunities(immunities, weaknesses);
       }
       setWeakness(weaknesses);
       setTypes(newTypes);
@@ -63,13 +65,11 @@ function Quiz() {
     return (num1 !== num2 ? true : false);
   }
 
-  // add a conditional promise chaining function
-  // also add a function that will do all state setting
-
-  function doData(res, typesArr, weakArr, resArr) {
+  function doData(res, typesArr, weakArr, resArr, immuArr) {
           typesArr.push(res.name);
           addToWeaknesses(res.damage_relations.double_damage_from, weakArr);
           addToResistances(res.damage_relations.half_damage_from, resArr);
+          addToImmunities(res.damage_relations.no_damage_from, immuArr)
   }
 
   function addToWeaknesses(res, weaknessArr) {
@@ -88,10 +88,26 @@ function Quiz() {
     }
   }
 
+  function addToImmunities(res, immuArr) {
+    for(const type in res) {
+      if (!immuArr.includes(type)) {
+        immuArr.push(res[type].name);
+      }
+    }
+  }
+
   function removeResistances(resists, weaknessArr) {
     resists.forEach(resist => {
       if (weaknessArr.includes(resist)) {
         weaknessArr.splice(weaknessArr.indexOf(resist), 1);
+      }
+    })
+  }
+
+  function removeImmunities(immunities, weaknesses) {
+    immunities.forEach(immunity => {
+      if (weaknesses.includes(immunity)) {
+        weaknesses.splice(weaknesses.indexOf(immunity), 1);
       }
     })
   }
