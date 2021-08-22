@@ -59,13 +59,14 @@ function Quiz() {
     try {
       const response1 = await fetch(`https://pokeapi.co/api/v2/type/${random1}/`);
       const type1 = await response1.json();
-      doData(type1, newTypes, weaknesses, resistances, immunities);
+      addData(type1, newTypes, weaknesses, resistances, immunities);
+      // set chance of single type pokemon showing up as a question
       if (random3 > 1 && random2 !== random1) {
         const response2 = await fetch(`https://pokeapi.co/api/v2/type/${random2}/`);
         const type2 = await response2.json();
-        doData(type2, newTypes, weaknesses, resistances, immunities);
-        removeResistances(resistances, weaknesses);
-        removeImmunities(immunities, weaknesses);
+        addData(type2, newTypes, weaknesses, resistances, immunities);
+        removeTypeFromArray(resistances, weaknesses);
+        removeTypeFromArray(immunities, weaknesses);
       }
       setWeakness(weaknesses);
       setTypes(newTypes);
@@ -84,55 +85,30 @@ function Quiz() {
     }
   }
 
-  function doData(res, typesArr, weakArr, resArr, immuArr) {
+  function addData(res, typesArr, weakArr, resArr, immuArr) {
           typesArr.push(res.name);
-          addToWeaknesses(res.damage_relations.double_damage_from, weakArr);
-          addToResistances(res.damage_relations.half_damage_from, resArr);
-          addToImmunities(res.damage_relations.no_damage_from, immuArr)
+          addTypeToArray(res.damage_relations.double_damage_from, weakArr);
+          addTypeToArray(res.damage_relations.half_damage_from, resArr);
+          addTypeToArray(res.damage_relations.no_damage_from, immuArr);
   }
 
-  function addToWeaknesses(res, weaknessArr) {
+  function addTypeToArray(res, arr) {
     for(const type in res) {
-      if (!weaknessArr.includes(type)) {
-        weaknessArr.push(res[type].name);
+      if (!arr.includes(type)) {
+        arr.push(res[type].name);
       }
     }
   }
 
-  function addToResistances(res, resistArr) {
-    for(const type in res) {
-      if (!resistArr.includes(type)) {
-        resistArr.push(res[type].name)
-      }
-    }
-  }
-
-  function addToImmunities(res, immuArr) {
-    for(const type in res) {
-      if (!immuArr.includes(type)) {
-        immuArr.push(res[type].name);
-      }
-    }
-  }
-
-  function removeResistances(resists, weaknessArr) {
-    resists.forEach(resist => {
-      if (weaknessArr.includes(resist)) {
-        weaknessArr.splice(weaknessArr.indexOf(resist), 1);
+  function removeTypeFromArray(types, arr) {
+    types.forEach(type => {
+      if (arr.includes(type)) {
+        types.splice(type.indexOf(type), 1);
       }
     })
   }
 
-  function removeImmunities(immunities, weaknesses) {
-    immunities.forEach(immunity => {
-      if (weaknesses.includes(immunity)) {
-        weaknesses.splice(weaknesses.indexOf(immunity), 1);
-      }
-    })
-  }
-  
-
-  // figure out some way to call fetchData on load
+  // figure out some better way to call bigFetch on load
   useEffect(() => {
     bigFetch();
   }, []);
@@ -143,6 +119,7 @@ function Quiz() {
     )
   }
 
+  // set and shuffle array that will be used for the quiz button answers
   function gatherTypes(weakness) {
     let types = [];
     let count = 0;
@@ -223,6 +200,7 @@ ReactDOM.render(
   document.getElementById('root')
 );
 
+// generate random number 0 to num
 function generateRandom(num) {
   return Math.floor(Math.random() * num);
 }
