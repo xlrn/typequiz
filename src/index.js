@@ -25,17 +25,15 @@ function ResetButton(props) {
 }
 
 function TypeDisplay(props) {
+  let typeString = `Your target type: ${props.types[0]}`;
   if (props.types.length > 1) {
-    return (
-      <div>
-        <h1>Your target type: {props.types[0]} / {props.types[1]}</h1>
-      </div>
-    )
-  } else {
-    return (
-      <h1>Your target type: {props.types[0]}</h1>
-    )
+    typeString = typeString + `/ ${props.types[1]}`
   }
+  return (
+    <div>
+      <h1>{typeString}</h1>
+    </div>
+  )
 }
 
 function Quiz() {
@@ -189,7 +187,9 @@ function Quiz() {
   return (
     <div className="container">
       <div className="text">Reach 10 points to finish the quiz.</div>
-      <div>{status}</div>
+      <div>
+        <h1>{status}</h1>
+      </div>
       <TypeDisplay types={types}/>
       <ScoreKeeper score={score}/>
       <div className="text">Select the type your target is weak to!</div>
