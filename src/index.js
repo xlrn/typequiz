@@ -39,7 +39,7 @@ function TypeDisplay(props) {
 function StatusDisplay(props) {
   return (
     <div>
-      <h1>{props.status}</h1>
+      <h1 className="statusDisplay">{props.status}</h1>
     </div>
   )
 }
@@ -152,10 +152,12 @@ function Quiz() {
     if (weakness.includes(e.target.value)) {
       bigFetch();
       setStatus("Correct!");
+      changeStatusDisplay("green");
       updateScore();
     } else {
       bigFetch();
       setStatus("Incorrect!");
+      changeStatusDisplay("red");
     }
   }
 
@@ -163,6 +165,7 @@ function Quiz() {
     setScore(0);
     setTotal(0);
     setStatus("");
+    changeStatusDisplay("black");
     bigFetch();
   }
 
@@ -188,6 +191,11 @@ function Quiz() {
     return (
       <TypeButton type={type} onClick={handleQuizLogic}>{type}</TypeButton>
     )
+  }
+
+  function changeStatusDisplay(color) {
+    let display = document.querySelector(".statusDisplay");
+    display.style.color = color;
   }
 
   // render error message if one occurs

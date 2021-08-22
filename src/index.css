@@ -40,3 +40,7 @@ code {
   margin-bottom: 20px;
   margin-top: 20px;
 }
+
+.statusDisplay {
+  color: black;
+}
