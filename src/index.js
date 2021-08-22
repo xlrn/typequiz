@@ -36,6 +36,14 @@ function TypeDisplay(props) {
   )
 }
 
+function StatusDisplay(props) {
+  return (
+    <div>
+      <h1>{props.status}</h1>
+    </div>
+  )
+}
+
 function Quiz() {
   const [score, setScore] = useState(0);
   const [total, setTotal] = useState(0);
@@ -64,7 +72,7 @@ function Quiz() {
       addData(type1, newTypes, weaknesses, resistances, immunities);
       // set chance of single-type pokemon showing up as the question
       // make sure the two random types will also not be the same
-      if (singleTypeChance > 1 && random2 !== random1) {
+      if (singleTypeChance > 1 && typeId2 !== typeId1) {
         const response2 = await fetch(`https://pokeapi.co/api/v2/type/${typeId2}/`);
         const type2 = await response2.json();
         addData(type2, newTypes, weaknesses, resistances, immunities);
@@ -143,9 +151,11 @@ function Quiz() {
     updateTotal();
     if (weakness.includes(e.target.value)) {
       bigFetch();
+      setStatus("Correct!");
       updateScore();
     } else {
       bigFetch();
+      setStatus("Incorrect!");
     }
   }
 
@@ -190,9 +200,7 @@ function Quiz() {
     return (
         <div className="container">
           <div className="text">Reach 10 points to finish the quiz.</div>
-          <div>
-            <h1>{status}</h1>
-          </div>
+          <StatusDisplay status={status}/>
           <TypeDisplay types={types}/>
           <ScoreKeeper score={score}/>
           <div className="text">Select the type your target is weak to!</div>
