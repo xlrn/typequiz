@@ -92,10 +92,10 @@ function Quiz() {
   }, []);
 
   function addData(res, typesArr, weakArr, resArr, immuArr) {
-          typesArr.push(res.name);
-          addTypeToArray(res.damage_relations.double_damage_from, weakArr);
-          addTypeToArray(res.damage_relations.half_damage_from, resArr);
-          addTypeToArray(res.damage_relations.no_damage_from, immuArr);
+    typesArr.push(res.name);
+    addTypeToArray(res.damage_relations.double_damage_from, weakArr);
+    addTypeToArray(res.damage_relations.half_damage_from, resArr);
+    addTypeToArray(res.damage_relations.no_damage_from, immuArr);
   }
 
   function addTypeToArray(res, arr) {
