@@ -48,6 +48,8 @@ function Quiz() {
   const [quizButtons, setQuizButtons] = useState([]);
   const [status, setStatus] = useState("");
 
+
+  // main function for updating types displayed on the quiz
   async function bigFetch() {
     let newTypes = [];
     let weaknesses = [];
@@ -58,20 +60,25 @@ function Quiz() {
     let random3 = generateRandom(5);
 
     try {
+      // grab first random type from api
       const response1 = await fetch(`https://pokeapi.co/api/v2/type/${random1}/`);
       const type1 = await response1.json();
       addData(type1, newTypes, weaknesses, resistances, immunities);
       // set chance of single-type pokemon showing up as the question
+      // make sure the two random types will also not be the same
       if (random3 > 1 && random2 !== random1) {
         const response2 = await fetch(`https://pokeapi.co/api/v2/type/${random2}/`);
         const type2 = await response2.json();
         addData(type2, newTypes, weaknesses, resistances, immunities);
+        // filter out resistances and immunities from the weaknesses array 
+        // to only allow weaknesses from different type interactions
+        // i.e. a fire/water type pokemon would not be weak to fire because water is resistant to itself
         removeTypeFromArray(resistances, weaknesses);
         removeTypeFromArray(immunities, weaknesses);
       }
       setWeakness(weaknesses);
       setTypes(newTypes);
-      gatherTypes(weaknesses[generateRandom(weaknesses.length)]);
+      shuffleTypes(weaknesses[generateRandom(weaknesses.length)]);
       setIsLoaded(true);
     }
     catch (error) {
@@ -91,6 +98,7 @@ function Quiz() {
     bigFetch();
   }, []);
 
+  // adds the result from api call to each array, weaknesses, resistances, immunities
   function addData(res, typesArr, weakArr, resArr, immuArr) {
     typesArr.push(res.name);
     addTypeToArray(res.damage_relations.double_damage_from, weakArr);
@@ -115,7 +123,7 @@ function Quiz() {
   }
 
   // set and shuffle array that will be used for the quiz button answers
-  function gatherTypes(weakness) {
+  function shuffleTypes(weakness) {
     let types = [];
     let count = 0;
     while (count < 3) {
@@ -149,11 +157,14 @@ function Quiz() {
     bigFetch();
   }
 
+  // total is used to calculate the percentage given at the completion message
   function updateTotal() {
     let newTotal = total + 1;
     setTotal(newTotal);
   }
 
+  // update the score upon answering the question correctly
+  // disables button and delivers completion message upon reaching 10 points
   function updateScore() {
     let newScore = score + 1;
     setScore(newScore);
