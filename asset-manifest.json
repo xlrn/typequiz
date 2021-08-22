@@ -1,8 +1,8 @@
 {
   "files": {
-    "main.css": "/typequiz/static/css/main.0733dce4.chunk.css",
-    "main.js": "/typequiz/static/js/main.82f9d8f8.chunk.js",
-    "main.js.map": "/typequiz/static/js/main.82f9d8f8.chunk.js.map",
+    "main.css": "/typequiz/static/css/main.a2298456.chunk.css",
+    "main.js": "/typequiz/static/js/main.57e3a527.chunk.js",
+    "main.js.map": "/typequiz/static/js/main.57e3a527.chunk.js.map",
     "runtime-main.js": "/typequiz/static/js/runtime-main.af5058ec.js",
     "runtime-main.js.map": "/typequiz/static/js/runtime-main.af5058ec.js.map",
     "static/css/2.983f79de.chunk.css": "/typequiz/static/css/2.983f79de.chunk.css",
@@ -10,14 +10,14 @@
     "static/js/2.97e73b5b.chunk.js.map": "/typequiz/static/js/2.97e73b5b.chunk.js.map",
     "index.html": "/typequiz/index.html",
     "static/css/2.983f79de.chunk.css.map": "/typequiz/static/css/2.983f79de.chunk.css.map",
-    "static/css/main.0733dce4.chunk.css.map": "/typequiz/static/css/main.0733dce4.chunk.css.map",
+    "static/css/main.a2298456.chunk.css.map": "/typequiz/static/css/main.a2298456.chunk.css.map",
     "static/js/2.97e73b5b.chunk.js.LICENSE.txt": "/typequiz/static/js/2.97e73b5b.chunk.js.LICENSE.txt"
   },
   "entrypoints": [
     "static/js/runtime-main.af5058ec.js",
     "static/css/2.983f79de.chunk.css",
     "static/js/2.97e73b5b.chunk.js",
-    "static/css/main.0733dce4.chunk.css",
-    "static/js/main.82f9d8f8.chunk.js"
+    "static/css/main.a2298456.chunk.css",
+    "static/js/main.57e3a527.chunk.js"
   ]
 }
