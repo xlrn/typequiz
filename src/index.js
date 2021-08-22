@@ -76,7 +76,8 @@ function Quiz() {
       }
       setWeakness(weaknesses);
       setTypes(newTypes);
-      shuffleTypes(weaknesses[generateRandom(weaknesses.length)]);
+      let typeButtons = shuffleTypes(weaknesses[generateRandom(weaknesses.length)]);
+      setQuizButtons(typeButtons);
       setIsLoaded(true);
     }
     catch (error) {
@@ -115,12 +116,12 @@ function Quiz() {
   function removeTypeFromArray(types, arr) {
     types.forEach(type => {
       if (arr.includes(type)) {
-        types.splice(type.indexOf(type), 1);
+        arr.splice(arr.indexOf(type), 1);
       }
     })
   }
 
-  // set and shuffle array that will be used for the quiz button answers
+  // returns a shuffled array of 4 types, one being the weakness
   function shuffleTypes(weakness) {
     let types = [];
     let count = 0;
@@ -133,8 +134,8 @@ function Quiz() {
       }
     }
     types.push(weakness);
-    shuffleArray(types);
-    setQuizButtons(types);
+    let shuffledTypes = shuffleArray(types);
+    return shuffledTypes;
   }
 
   // update totals, scores and types upon clicking quiz button
