@@ -59,7 +59,7 @@ function Quiz() {
       const response1 = await fetch(`https://pokeapi.co/api/v2/type/${random1}/`);
       const type1 = await response1.json();
       doData(type1, newTypes, weaknesses, resistances, immunities);
-      if (random3 < 1) {
+      if (random3 > 1) {
         const response2 = await fetch(`https://pokeapi.co/api/v2/type/${random2}/`);
         const type2 = await response2.json();
         doData(type2, newTypes, weaknesses, resistances, immunities);
@@ -168,6 +168,13 @@ function Quiz() {
     }
   }
 
+  function handleReset() {
+    setScore(0);
+    setTotal(0);
+    setStatus("");
+    bigFetch();
+  }
+
   function updateTotal() {
     let newTotal = total + 1;
     setTotal(newTotal);
@@ -201,7 +208,7 @@ function Quiz() {
         {renderTypeButton(quizButtons[3])}
       </div>
       <div>
-        <ResetButton/>
+        <ResetButton onClick={handleReset}/>
       </div>
     </div>
   )}
