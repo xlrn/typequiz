@@ -179,31 +179,34 @@ function Quiz() {
     )
   }
 
+  // render error message if one occurs
   if (error) {
     return <div>Error: {error.message}</div>
   } else if (!isLoaded) {
+    // render loading message if not loaded
     return <div>Loading...</div>
   } else {
-  return (
-    <div className="container">
-      <div className="text">Reach 10 points to finish the quiz.</div>
-      <div>
-        <h1>{status}</h1>
-      </div>
-      <TypeDisplay types={types}/>
-      <ScoreKeeper score={score}/>
-      <div className="text">Select the type your target is weak to!</div>
-      <div className="buttons">
-        {renderTypeButton(quizButtons[0])}
-        {renderTypeButton(quizButtons[1])}
-        {renderTypeButton(quizButtons[2])}
-        {renderTypeButton(quizButtons[3])}
-      </div>
-      <div>
-        <ResetButton onClick={handleReset}/>
-      </div>
-    </div>
-  )}
+    return (
+        <div className="container">
+          <div className="text">Reach 10 points to finish the quiz.</div>
+          <div>
+            <h1>{status}</h1>
+          </div>
+          <TypeDisplay types={types}/>
+          <ScoreKeeper score={score}/>
+          <div className="text">Select the type your target is weak to!</div>
+          <div className="buttons">
+            {renderTypeButton(quizButtons[0])}
+            {renderTypeButton(quizButtons[1])}
+            {renderTypeButton(quizButtons[2])}
+            {renderTypeButton(quizButtons[3])}
+          </div>
+          <div>
+            <ResetButton onClick={handleReset}/>
+          </div>
+        </div>
+    )
+  }
 }
 
 ReactDOM.render(
