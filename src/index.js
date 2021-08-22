@@ -53,19 +53,19 @@ function Quiz() {
     let weaknesses = [];
     let resistances = [];
     let immunities = [];
-    let random1 = generateRandom(18) + 1;
-    let random2 = generateRandom(18) + 1;
-    let random3 = generateRandom(5);
+    let typeId1 = generateRandom(18) + 1;
+    let typeId2 = generateRandom(18) + 1;
+    let singleTypeChance = generateRandom(5);
 
     try {
       // grab first random type from api
-      const response1 = await fetch(`https://pokeapi.co/api/v2/type/${random1}/`);
+      const response1 = await fetch(`https://pokeapi.co/api/v2/type/${typeId1}/`);
       const type1 = await response1.json();
       addData(type1, newTypes, weaknesses, resistances, immunities);
       // set chance of single-type pokemon showing up as the question
       // make sure the two random types will also not be the same
-      if (random3 > 1 && random2 !== random1) {
-        const response2 = await fetch(`https://pokeapi.co/api/v2/type/${random2}/`);
+      if (singleTypeChance > 1 && random2 !== random1) {
+        const response2 = await fetch(`https://pokeapi.co/api/v2/type/${typeId2}/`);
         const type2 = await response2.json();
         addData(type2, newTypes, weaknesses, resistances, immunities);
         // filter out resistances and immunities from the weaknesses array 
