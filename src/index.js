@@ -152,12 +152,12 @@ function Quiz() {
     if (weakness.includes(e.target.value)) {
       bigFetch();
       setStatus("Correct!");
-      changeStatusDisplay("green");
+      changeStatusColor("green");
       updateScore();
     } else {
       bigFetch();
       setStatus("Incorrect!");
-      changeStatusDisplay("red");
+      changeStatusColor("red");
     }
   }
 
@@ -165,7 +165,7 @@ function Quiz() {
     setScore(0);
     setTotal(0);
     setStatus("");
-    changeStatusDisplay("black");
+    changeStatusColor("black");
     bigFetch();
   }
 
@@ -184,6 +184,7 @@ function Quiz() {
       let percent = Math.floor((score / total) * 100);
       disableButtons();
       setStatus(`You have completed the quiz! You got ${percent}%!`);
+      changeStatusColor("black");
     }
   }
 
@@ -193,7 +194,7 @@ function Quiz() {
     )
   }
 
-  function changeStatusDisplay(color) {
+  function changeStatusColor(color) {
     let display = document.querySelector(".statusDisplay");
     display.style.color = color;
   }
