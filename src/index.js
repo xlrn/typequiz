@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import ReactDOM from 'react-dom';
 import './index.css';
+import 'bootstrap/dist/css/bootstrap.css';
 import typeList from './types';
 
 function ScoreKeeper(props) {
@@ -13,13 +14,13 @@ function ScoreKeeper(props) {
 
 function TypeButton(props) {
   return (
-      <button className="typeButton" value={props.type} onClick={props.onClick}>{props.type}</button>
+      <button type="button" className="btn btn-primary typeButton" value={props.type} onClick={props.onClick}>{props.type}</button>
   )
 }
 
 function ResetButton(props) {
   return (
-    <button className="resetButton" onClick={props.onClick}>Reset</button>
+    <button className="btn btn-secondary resetButton" onClick={props.onClick}>Reset</button>
   )
 }
 
@@ -59,7 +60,7 @@ function Quiz() {
       const response1 = await fetch(`https://pokeapi.co/api/v2/type/${random1}/`);
       const type1 = await response1.json();
       doData(type1, newTypes, weaknesses, resistances, immunities);
-      if (random3 > 1) {
+      if (random3 > 1 && random2 !== random1) {
         const response2 = await fetch(`https://pokeapi.co/api/v2/type/${random2}/`);
         const type2 = await response2.json();
         doData(type2, newTypes, weaknesses, resistances, immunities);
@@ -185,6 +186,7 @@ function Quiz() {
     setScore(newScore);
     if (newScore >= 10) {
       let percent = Math.floor((score / total) * 100);
+      disableButtons();
       setStatus(`You have completed the quiz! You got ${percent}%!`);
     }
   }
@@ -231,4 +233,9 @@ function shuffleArray(a) {
     [a[i], a[j]] = [a[j], a[i]];
   }
   return a;
+}
+
+function disableButtons() {
+  let buttons = document.querySelectorAll(".typeButton");
+  buttons.forEach(button => button.disabled = true);
 }
