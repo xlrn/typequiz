@@ -17,6 +17,12 @@ function TypeButton(props) {
   )
 }
 
+function ResetButton(props) {
+  return (
+    <button className="resetButton" onClick={props.onClick}>Reset</button>
+  )
+}
+
 function TypeDisplay(props) {
   if (props.types.length > 1) {
     return (
@@ -33,6 +39,7 @@ function TypeDisplay(props) {
 
 function Quiz() {
   const [score, setScore] = useState(0);
+  const [total, setTotal] = useState(0);
   const [types, setTypes] = useState([]);
   const [error, setError] = useState(null);
   const [isLoaded, setIsLoaded] = useState(false);
@@ -47,11 +54,12 @@ function Quiz() {
     let immunities = [];
     let random1 = generateRandom(18) + 1;
     let random2 = generateRandom(18) + 1;
+    let random3 = generateRandom(5);
     try {
       const response1 = await fetch(`https://pokeapi.co/api/v2/type/${random1}/`);
       const type1 = await response1.json();
       doData(type1, newTypes, weaknesses, resistances, immunities);
-      if (checkRandom(random1, random2)) {
+      if (random3 < 1) {
         const response2 = await fetch(`https://pokeapi.co/api/v2/type/${random2}/`);
         const type2 = await response2.json();
         doData(type2, newTypes, weaknesses, resistances, immunities);
@@ -73,10 +81,6 @@ function Quiz() {
       setIsLoaded(true);
       setError(error);
     }
-  }
-
-  function checkRandom(num1, num2) {
-    return (num1 !== num2 ? true : false);
   }
 
   function doData(res, typesArr, weakArr, resArr, immuArr) {
@@ -154,15 +158,8 @@ function Quiz() {
     setQuizButtons(types);
   }
 
-  function shuffleArray(a) {
-    for (let i = a.length - 1; i > 0; i--) {
-      const j = generateRandom(i+1);
-      [a[i], a[j]] = [a[j], a[i]];
-    }
-    return a;
-  }
-
   function handleQuizLogic(e) {
+    updateTotal();
     if (weakness.includes(e.target.value)) {
       bigFetch();
       updateScore();
@@ -171,11 +168,17 @@ function Quiz() {
     }
   }
 
+  function updateTotal() {
+    let newTotal = total + 1;
+    setTotal(newTotal);
+  }
+
   function updateScore() {
     let newScore = score + 1;
     setScore(newScore);
     if (newScore >= 10) {
-      setStatus("You have completed the quiz!");
+      let percent = Math.floor((score / total) * 100);
+      setStatus(`You have completed the quiz! You got ${percent}%!`);
     }
   }
 
@@ -197,6 +200,9 @@ function Quiz() {
         {renderTypeButton(quizButtons[2])}
         {renderTypeButton(quizButtons[3])}
       </div>
+      <div>
+        <ResetButton/>
+      </div>
     </div>
   )}
 }
@@ -210,4 +216,12 @@ ReactDOM.render(
 
 function generateRandom(num) {
   return Math.floor(Math.random() * num);
+}
+
+function shuffleArray(a) {
+  for (let i = a.length - 1; i > 0; i--) {
+    const j = generateRandom(i+1);
+    [a[i], a[j]] = [a[j], a[i]];
+  }
+  return a;
 }
