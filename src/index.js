@@ -56,11 +56,12 @@ function Quiz() {
     let random1 = generateRandom(18) + 1;
     let random2 = generateRandom(18) + 1;
     let random3 = generateRandom(5);
+
     try {
       const response1 = await fetch(`https://pokeapi.co/api/v2/type/${random1}/`);
       const type1 = await response1.json();
       addData(type1, newTypes, weaknesses, resistances, immunities);
-      // set chance of single type pokemon showing up as a question
+      // set chance of single-type pokemon showing up as the question
       if (random3 > 1 && random2 !== random1) {
         const response2 = await fetch(`https://pokeapi.co/api/v2/type/${random2}/`);
         const type2 = await response2.json();
@@ -85,6 +86,11 @@ function Quiz() {
     }
   }
 
+  // figure out some better way to call bigFetch on load
+  useEffect(() => {
+    bigFetch();
+  }, []);
+
   function addData(res, typesArr, weakArr, resArr, immuArr) {
           typesArr.push(res.name);
           addTypeToArray(res.damage_relations.double_damage_from, weakArr);
@@ -108,17 +114,6 @@ function Quiz() {
     })
   }
 
-  // figure out some better way to call bigFetch on load
-  useEffect(() => {
-    bigFetch();
-  }, []);
-
-  function renderTypeButton(type) {
-    return (
-      <TypeButton type={type} onClick={handleQuizLogic}>{type}</TypeButton>
-    )
-  }
-
   // set and shuffle array that will be used for the quiz button answers
   function gatherTypes(weakness) {
     let types = [];
@@ -136,6 +131,7 @@ function Quiz() {
     setQuizButtons(types);
   }
 
+  // update totals, scores and types upon clicking quiz button
   function handleQuizLogic(e) {
     updateTotal();
     if (weakness.includes(e.target.value)) {
@@ -166,6 +162,12 @@ function Quiz() {
       disableButtons();
       setStatus(`You have completed the quiz! You got ${percent}%!`);
     }
+  }
+
+  function renderTypeButton(type) {
+    return (
+      <TypeButton type={type} onClick={handleQuizLogic}>{type}</TypeButton>
+    )
   }
 
   if (error) {
@@ -205,6 +207,9 @@ function generateRandom(num) {
   return Math.floor(Math.random() * num);
 }
 
+// shuffle the array by using the durstenfeld shuffle
+// pick random element, exclude from next draw by swapping with
+// current element, done in place.
 function shuffleArray(a) {
   for (let i = a.length - 1; i > 0; i--) {
     const j = generateRandom(i+1);
