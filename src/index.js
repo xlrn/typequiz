@@ -25,7 +25,7 @@ function ResetButton(props) {
 }
 
 function TypeDisplay(props) {
-  let typeString = `Your target type: ${props.types[0]}`;
+  let typeString = `Your opponent's Pokemon type: ${props.types[0]}`;
   if (props.types.length > 1) {
     typeString = typeString + `/ ${props.types[1]}`
   }
@@ -211,10 +211,11 @@ function Quiz() {
     return (
         <div className="container">
           <div className="text">Reach 10 points to finish the quiz.</div>
+          <div className="text"></div>
           <StatusDisplay status={status}/>
-          <TypeDisplay types={types}/>
           <ScoreKeeper score={score}/>
-          <div className="text">Select the type your target is weak to!</div>
+          <TypeDisplay types={types}/>
+          <div className="text">Select the type of Pokemon your foe is weak too!</div>
           <div className="buttons">
             {renderTypeButton(quizButtons[0])}
             {renderTypeButton(quizButtons[1])}
