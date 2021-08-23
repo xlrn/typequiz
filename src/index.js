@@ -105,6 +105,8 @@ function Quiz() {
     bigFetch();
   }, []);
 
+
+  // can move the next couple of functions outside of component
   // adds the result from api call to each array, weaknesses, resistances, immunities
   function addData(res, typesArr, weakArr, resArr, immuArr) {
     typesArr.push(res.name);
